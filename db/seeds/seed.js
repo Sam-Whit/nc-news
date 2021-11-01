@@ -27,7 +27,7 @@ const seed = (data) => {
       username VARCHAR(20) PRIMARY KEY,
       avatar_url VARCHAR,
       name VARCHAR(200)
-    );`); //ask about NVARCHAR for url
+    );`);
       })
       .then(() => {
         return db.query(`CREATE TABLE articles (
@@ -38,7 +38,7 @@ const seed = (data) => {
         topic TEXT REFERENCES topics(slug),
         author TEXT REFERENCES users(username),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )`);
+      );`);
       })
       .then(() => {
         return db.query(`CREATE TABLE comments (
@@ -48,18 +48,47 @@ const seed = (data) => {
         votes INT DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         body VARCHAR
-      )`);
+      );`);
       })
       // 2. insert data
       .then(() => {
-        console.log("inserting");
+        console.log(topicData);
         const queryStr = format(
           `INSERT INTO topics (slug, description)
-          VALUES %L RETURNING *;`,
+      VALUES %L RETURNING *;`,
           topicData.map((topic) => {
-            [topic.slug, topic.description];
+            return [topic.slug, topic.description];
           })
         );
+        return db.query(queryStr);
+      })
+      .then(() => {
+        const queryStr = format(
+          `INSERT INTO users (username, avatar_url, name)
+      VALUES %L RETURNING *;`,
+          userData.map((user) => {
+            return [user.username, user.avatar_url, user.name];
+          })
+        );
+        return db.query(queryStr);
+      })
+      .then(() => {
+        console.log("inserting 3");
+        const queryStr = format(
+          `INSERT INTO articles (title, body, votes, topic, author, created_at)
+      VALUES %L RETURNING *;`,
+          userData.map((article) => {
+            return [
+              article.title,
+              article.body,
+              article.votes,
+              article.topic,
+              article.author,
+              article.created_at,
+            ];
+          })
+        );
+        return db.query(queryStr);
       })
   );
 };
