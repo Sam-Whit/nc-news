@@ -73,11 +73,10 @@ const seed = (data) => {
         return db.query(queryStr);
       })
       .then(() => {
-        console.log("inserting 3");
         const queryStr = format(
           `INSERT INTO articles (title, body, votes, topic, author, created_at)
-      VALUES %L RETURNING *;`,
-          userData.map((article) => {
+          VALUES %L RETURNING *;`,
+          articleData.map((article) => {
             return [
               article.title,
               article.body,
@@ -85,6 +84,24 @@ const seed = (data) => {
               article.topic,
               article.author,
               article.created_at,
+            ];
+          })
+        );
+        return db.query(queryStr);
+      })
+      .then(() => {
+        console.log("inserting 3");
+        const queryStr = format(
+          `INSERT INTO comments ( author, article_id, votes, created_at,
+        body)
+  VALUES %L RETURNING *;`,
+          commentData.map((comment) => {
+            return [
+              comment.author,
+              comment.article_id,
+              comment.votes,
+              comment.created_at,
+              comment.body,
             ];
           })
         );
