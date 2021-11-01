@@ -1,3 +1,6 @@
+const db = require("../connection/index");
+const format = require("pg-format");
+
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
   // 1. create tables
