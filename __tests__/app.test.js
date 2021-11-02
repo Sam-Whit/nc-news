@@ -51,4 +51,21 @@ describe("/api/articles", () => {
         });
       });
   });
+  test("status 404: article_id does not exist in database", () => {
+    return request(app)
+      .get("/api/articles/6452")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("article not found");
+      });
+  });
+
+  test("status 400: invalid article_id", () => {
+    return request(app)
+      .get("/api/articles/not_a_review_id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
 });
