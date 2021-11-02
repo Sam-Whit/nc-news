@@ -1,4 +1,5 @@
 const express = require("express");
+const { PSQLerror } = require("./controllers/error.controller");
 const apiRouter = require("./routers/api.router");
 const app = express();
 
@@ -10,19 +11,9 @@ app.all("/*", (req, res, next) => {
   res.status(404).send({ msg: "Not found" });
 });
 
-app.use((err, req, res, next) => {
-  if (err.status && err.msg) {
-    res.status(err.status).send({ msg: err.msg });
-  } else {
-    next(err);
-  }
-});
+app.use(customError);
 
-app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad request, invalid input" });
-  }
-});
+app.use(PSQLerror);
 
 app.use((err, req, res, next) => {
   console.log(err);

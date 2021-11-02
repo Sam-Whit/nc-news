@@ -30,8 +30,8 @@ describe("GET api/topics", () => {
   });
 });
 
-describe("/api/articles", () => {
-  test("GET - /api/articles/:article_id", () => {
+describe("/api/articles/:article_id", () => {
+  test("status 200: returns an article by id", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -59,13 +59,35 @@ describe("/api/articles", () => {
         expect(body.msg).toBe("article not found");
       });
   });
-
   test("status 400: invalid article_id", () => {
     return request(app)
       .get("/api/articles/not_a_review_id")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  it("accepts an object in the form { inc_votes: newVote } and responds with the updated article, with the new number of votes", () => {
+    return request(app)
+      .patch("/api/articles/3")
+      .send({ inc_votes: 5 })
+      .expect(201)
+      .then((response) => {
+        const { body } = response;
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            author: "icellusedkars",
+            title: "Eight pug gifs that remind me of mitch",
+            article_id: 3,
+            body: expect.any(String),
+            topic: "mitch",
+            created_at: expect.any(String),
+            votes: 5,
+          })
+        );
       });
   });
 });
