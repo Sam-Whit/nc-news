@@ -52,7 +52,6 @@ const seed = (data) => {
       })
       // 2. insert data
       .then(() => {
-        console.log(topicData);
         const queryStr = format(
           `INSERT INTO topics (slug, description)
       VALUES %L RETURNING *;`,
@@ -90,7 +89,6 @@ const seed = (data) => {
         return db.query(queryStr);
       })
       .then(() => {
-        console.log("inserting 3");
         const queryStr = format(
           `INSERT INTO comments ( author, article_id, votes, created_at,
         body)
