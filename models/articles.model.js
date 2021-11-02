@@ -17,3 +17,7 @@ GROUP BY articles.article_id;`;
     }
   });
 };
+
+exports.patchVotes = (article_id, inc_votes) => {
+  console.log("inside model");
+};
