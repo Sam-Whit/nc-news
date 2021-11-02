@@ -69,25 +69,4 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe("PATCH /api/articles/:article_id", () => {
-  it("accepts an object in the form { inc_votes: newVote } and responds with the updated article, with the new number of votes", () => {
-    return request(app)
-      .patch("/api/articles/3")
-      .send({ inc_votes: 5 })
-      .expect(201)
-      .then((response) => {
-        const { body } = response;
-        expect(body.article).toEqual(
-          expect.objectContaining({
-            author: "icellusedkars",
-            title: "Eight pug gifs that remind me of mitch",
-            article_id: 3,
-            body: expect.any(String),
-            topic: "mitch",
-            created_at: expect.any(String),
-            votes: 5,
-          })
-        );
-      });
-  });
-});
+describe("PATCH /api/articles/:article_id", () => {});
