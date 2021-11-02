@@ -77,6 +77,16 @@ it("status 201: accepts an object in the form { inc_votes: newVote } and respond
     .expect(201)
     .then((response) => {
       const { body } = response;
-      expect(body.article).toEqual(expect.objectContaining({}));
+      expect(body.article).toEqual(
+        expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: 5,
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: 11,
+        })
+      );
     });
 });
