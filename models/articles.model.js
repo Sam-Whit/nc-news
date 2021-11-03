@@ -26,7 +26,7 @@ exports.patchVotes = (article_id, inc_votes) => {
 SET votes = votes + $1
 WHERE article_id = $2
 RETURNING *;`;
-  return db.query(queryStr, [inc_votes, article_id]).then((obj) => {
-    console.log(obj);
+  return db.query(queryStr, [inc_votes, article_id]).then(({ rows }) => {
+    return rows[0];
   });
 };

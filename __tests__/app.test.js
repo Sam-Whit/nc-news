@@ -68,7 +68,7 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe("PATCH /api/articles/:article_id", () => {});
+describe.only("PATCH /api/articles/:article_id", () => {});
 it("status 201: accepts an object in the form { inc_votes: newVote } and responds with the updated article", () => {
   return request(app)
     .patch("/api/articles/5")
