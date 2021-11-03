@@ -1,5 +1,5 @@
 const express = require("express");
-const { PSQLerror } = require("./controllers/error.controller");
+const { PSQLerror, customError } = require("./controllers/error.controller");
 const apiRouter = require("./routers/api.router");
 const app = express();
 
