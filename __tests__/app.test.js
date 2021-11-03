@@ -160,4 +160,15 @@ describe.only("GET ALL - Articles", () => {
         expect(body).toBeSorted({ descending: true });
       });
   });
+  test("status 200: Returns articles filtered by topic", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toHaveLength(1);
+        body.articles.forEach((article) => {
+          expect(article.topic).toBe("cats");
+        });
+      });
+  });
 });

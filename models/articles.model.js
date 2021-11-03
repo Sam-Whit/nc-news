@@ -39,22 +39,21 @@ RETURNING *;`;
 
 exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
   let queryStr = `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT(comments.comment_id)::Int AS comment_count FROM articles
-    LEFT JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id`;
+    LEFT JOIN comments ON articles.article_id = comments.article_id`;
+
+  const queryValues = [];
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE articles.topic = $1`;
+  }
+  console.log(queryStr);
+
+  queryStr += ` GROUP BY articles.article_id`;
 
   queryStr += ` ORDER BY ${sort_by} ${order}`;
 
-  //   if (topic) {
-  //     if (queryValues.length) {
-  //       queryStr += " AND";
-  //     } else {
-  //       queryStr += " WHERE";
-  //     }
-  //     queryValues.push(order);
-  //     queryStr += ` column_name = $${queryValues.length}`;
-  //   }
-
-  return db.query(queryStr).then(({ rows }) => {
+  return db.query(queryStr, queryValues).then(({ rows }) => {
     return rows;
   });
 };
