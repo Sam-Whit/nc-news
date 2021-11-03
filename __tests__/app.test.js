@@ -97,5 +97,13 @@ it("status 400: malformed body / missing required fields", () => {
     .then(({ body }) => {
       expect(body.msg).toBe("Bad request, no input obj provided");
     });
-  //   it("second error test place holder (thinking invalid id");
+});
+it("status 400: sent wrong type of obj", () => {
+  return request(app)
+    .patch("/api/articles/5")
+    .send({ inc_votes: "string" })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad request, invalid input");
+    });
 });
