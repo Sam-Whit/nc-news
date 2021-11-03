@@ -88,6 +88,14 @@ it("status 201: accepts an object in the form { inc_votes: newVote } and respond
         })
       );
     });
-  //   it("first error test place holder (thinking 400 invalid input");
+});
+it("status 400: malformed body / missing required fields", () => {
+  return request(app)
+    .patch("/api/articles/5")
+    .send()
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Bad request, invalid input");
+    });
   //   it("second error test place holder (thinking invalid id");
 });
