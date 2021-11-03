@@ -37,13 +37,15 @@ RETURNING *;`;
   });
 };
 
-exports.fetchArticlesArr = () => {
+exports.fetchArticlesArr = (sort_by, order, topic) => {
   return db
     .query(
-      `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT(comments.article_id)::Int AS comment_count FROM articles
-      LEFT JOIN comments ON articles.article_id = comments.article_id`
+      `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT(comments.comment_id)::Int AS comment_count FROM articles
+      LEFT JOIN comments ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id;`
     )
     .then(({ rows }) => {
+      console.log(rows);
       return rows;
     });
 };
