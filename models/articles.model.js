@@ -36,3 +36,14 @@ RETURNING *;`;
     return rows[0];
   });
 };
+
+exports.fetchArticlesArr = () => {
+  return db
+    .query(
+      `SELECT * FROM articles, COUNT(comments.comment_id)::int AS comment_count
+  FROM articles;`
+    )
+    .then(({ rows }) => {
+      return rows;
+    });
+};

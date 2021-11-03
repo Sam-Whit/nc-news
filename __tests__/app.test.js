@@ -68,8 +68,8 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe.only("PATCH /api/articles/:article_id", () => {});
-it("status 201: accepts an object in the form { inc_votes: newVote } and responds with the updated article", () => {
+describe("PATCH /api/articles/:article_id", () => {});
+test("status 201: accepts an object in the form { inc_votes: newVote } and responds with the updated article", () => {
   return request(app)
     .patch("/api/articles/5")
     .send({ inc_votes: 11 })
@@ -89,7 +89,7 @@ it("status 201: accepts an object in the form { inc_votes: newVote } and respond
       );
     });
 });
-it("status 400: malformed body / missing required fields", () => {
+test("status 400: malformed body / missing required fields", () => {
   return request(app)
     .patch("/api/articles/5")
     .send()
@@ -98,7 +98,7 @@ it("status 400: malformed body / missing required fields", () => {
       expect(body.msg).toBe("Bad request, no input obj provided");
     });
 });
-it("status 400: sent wrong type of obj", () => {
+test("status 400: sent wrong type of obj", () => {
   return request(app)
     .patch("/api/articles/5")
     .send({ inc_votes: "string" })
@@ -106,4 +106,26 @@ it("status 400: sent wrong type of obj", () => {
     .then(({ body }) => {
       expect(body.msg).toBe("Bad request, invalid input");
     });
+});
+
+describe.only("GET ALL - Articles", () => {
+  test("status 200: responds with an array of the topics", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toHaveLength(12);
+        body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
 });
