@@ -128,4 +128,13 @@ describe.only("GET ALL - Articles", () => {
         });
       });
   });
+  test("Status 200: should sort by", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeSortedBy("title");
+      });
+  });
+  //   test("status 200: should sort by date created at as default");
 });
