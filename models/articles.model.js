@@ -1,5 +1,7 @@
 const db = require("../db/connection");
 
+//::int string conversion to interger from string in SQL
+
 exports.fetchArticle = (id) => {
   const queryStr = `SELECT 
   articles.*, COUNT(comments.comment_id)::int AS comment_count
