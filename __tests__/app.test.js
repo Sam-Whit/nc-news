@@ -144,4 +144,20 @@ describe.only("GET ALL - Articles", () => {
         expect(body).toBeSortedBy("created_at");
       });
   });
+  test("status 200: should be sorted by order specified", () => {
+    return request(app)
+      .get("/api/articles?order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeSorted({ descending: false });
+      });
+  });
+  test("status 200: should be sorted by descending order as default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeSorted({ descending: true });
+      });
+  });
 });
