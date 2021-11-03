@@ -95,7 +95,7 @@ it("status 400: malformed body / missing required fields", () => {
     .send()
     .expect(400)
     .then(({ body }) => {
-      expect(body.msg).toBe("Bad request, invalid input");
+      expect(body.msg).toBe("Bad request, no input obj provided");
     });
   //   it("second error test place holder (thinking invalid id");
 });

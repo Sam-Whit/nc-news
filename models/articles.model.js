@@ -27,6 +27,10 @@ SET votes = votes + $1
 WHERE article_id = $2
 RETURNING *;`;
   if (!inc_votes) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, no input obj provided",
+    });
   }
   return db.query(queryStr, [inc_votes, article_id]).then(({ rows }) => {
     return rows[0];
