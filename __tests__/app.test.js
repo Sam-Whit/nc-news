@@ -136,5 +136,12 @@ describe.only("GET ALL - Articles", () => {
         expect(body).toBeSortedBy("title");
       });
   });
-  //   test("status 200: should sort by date created at as default");
+  test("status 200: should sort by date created at as default", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeSortedBy("created_at");
+      });
+  });
 });
