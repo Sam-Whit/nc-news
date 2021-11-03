@@ -1,7 +1,6 @@
 const db = require("../db/connection");
 
 exports.fetchArticle = (id) => {
-  console.log("inside body");
   const queryStr = `SELECT 
   articles.*, COUNT(comments.comment_id)::int AS comment_count
 FROM articles
@@ -18,6 +17,14 @@ GROUP BY articles.article_id;`;
   });
 };
 
+//one table used no table. prefix
+
 exports.patchVotes = (article_id, inc_votes) => {
-  console.log("inside model");
+  const queryStr = `UPDATE articles 
+SET votes = votes + $1
+WHERE article_id = $2
+RETURNING *;`;
+  return db.query(queryStr, [inc_votes, article_id]).then((obj) => {
+    console.log(obj);
+  });
 };

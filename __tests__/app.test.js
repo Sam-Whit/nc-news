@@ -88,6 +88,6 @@ it("status 201: accepts an object in the form { inc_votes: newVote } and respond
         })
       );
     });
-  it("first error test place holder (thinking 400 invalid input");
-  it("second error test place holder (thinking invalid id");
+  //   it("first error test place holder (thinking 400 invalid input");
+  //   it("second error test place holder (thinking invalid id");
 });
