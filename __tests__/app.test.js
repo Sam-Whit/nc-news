@@ -171,7 +171,7 @@ describe.only("GET ALL - Articles", () => {
         });
       });
   });
-  it("status 200 can use all three queries", () => {
+  it("status 200: can use all three queries", () => {
     return request(app)
       .get("/api/articles?topic=cats&order=asc&sort_by=article_id")
       .expect(200)
@@ -196,4 +196,22 @@ describe.only("GET ALL - Articles", () => {
   //       .expect(400)
   //       .then();
   //   });
+  it("status 400: sort_by is not a valid sort_by option", () => {
+    return request(app)
+      .get("/api/articles?sort_by=not_sort_by")
+      .expect(400)
+      .then((response) => {
+        const { body } = response;
+        expect(body.msg).toEqual("Bad request");
+      });
+  });
+  it("Status 400: order which isn't 'asc' or 'desc'", () => {
+    return request(app)
+      .get("/api/articles?order=not_order")
+      .expect(400)
+      .then((response) => {
+        const { body } = response;
+        expect(body.msg).toEqual("Bad request");
+      });
+  });
 });
