@@ -60,7 +60,7 @@ describe("GET /api/articles/:article_id", () => {
   });
   test("status 400: invalid article_id", () => {
     return request(app)
-      .get("/api/articles/not_a_review_id")
+      .get("/api/articles/not_an_article_id")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request, invalid input");
@@ -254,6 +254,22 @@ describe.only("GET /api/articles/:article_id/comments", () => {
             })
           );
         });
+      });
+  });
+  test("status 404: article_id is does not exist in database", () => {
+    return request(app)
+      .get("/api/articles/999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("article not found");
+      });
+  });
+  test("status 400: invalid article_id", () => {
+    return request(app)
+      .get("/api/articles/not_an_article_id/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
       });
   });
 });
