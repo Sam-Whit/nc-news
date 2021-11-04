@@ -101,6 +101,6 @@ exports.postComment = (body, username, id) => {
     VALUES ($1, $2, $3)
     RETURNING *;`;
   return db.query(queryStr, [body, username, id]).then(({ rows }) => {
-    return rows;
+    return rows[0];
   });
 };

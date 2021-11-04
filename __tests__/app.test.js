@@ -283,8 +283,16 @@ describe.only("POST /api/articles/:article_id/comments", () => {
       .send(demoComment)
       .then((response) => {
         const { body } = response;
-        console.log(body);
-        expect(body.postedComment);
+        expect(body.postedComment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            author: "icellusedkars",
+            article_id: 9,
+            votes: 0,
+            created_at: expect.any(String),
+            body: "enjoying the project's progress",
+          })
+        );
       });
   });
 });
