@@ -190,12 +190,14 @@ describe.only("GET ALL - Articles", () => {
         });
       });
   });
-  //   test("status 400: sort_by is not a valid sort_by", () => {
-  //     return request(app)
-  //       .get("/api/articles?sort_by=not_a_sort_by")
-  //       .expect(400)
-  //       .then();
-  //   });
+  test("status 400: Invalid query type, query is not_valid", () => {
+    return request(app)
+      .get("/api/articles?not_a_query=not_an_input")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid: not a query");
+      });
+  });
   it("status 400: sort_by is not a valid sort_by option", () => {
     return request(app)
       .get("/api/articles?sort_by=not_sort_by")
@@ -214,4 +216,20 @@ describe.only("GET ALL - Articles", () => {
         expect(body.msg).toEqual("Bad request");
       });
   });
+  test("status 404: Queried topic does not exist in database", () => {
+    return request(app)
+      .get("/api/articles?topic=not_topic")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("topic not found");
+      });
+  });
+  //   test("status 404: Queried category does exist but no articles", () => {
+  //     return request(app)
+  //       .get("/api/articles?topic=")
+  //       .expect(404)
+  //       .then(({ body }) => {
+  //         expect(body.msg).toBe("articles not found");
+  //       });
+  //   });
 });
