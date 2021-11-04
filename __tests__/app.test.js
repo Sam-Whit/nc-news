@@ -171,10 +171,29 @@ describe.only("GET ALL - Articles", () => {
         });
       });
   });
-  test("status 400: sort_by is not a valid sort_by", () => {
+  it("status 200 can use all three queries", () => {
     return request(app)
-      .get("/api/articles?sort_by=not_a_sort_by")
-      .expect(400)
-      .then();
+      .get("/api/articles?topic=cats&order=asc&sort_by=article_id")
+      .expect(200)
+      .then((response) => {
+        const { body } = response;
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles).toHaveLength(1);
+        expect(body.articles).toBeSorted({ ascending: true });
+        expect(body.articles).toBeSortedBy("article_id");
+        body.articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              topic: "cats",
+            })
+          );
+        });
+      });
   });
+  //   test("status 400: sort_by is not a valid sort_by", () => {
+  //     return request(app)
+  //       .get("/api/articles?sort_by=not_a_sort_by")
+  //       .expect(400)
+  //       .then();
+  //   });
 });
