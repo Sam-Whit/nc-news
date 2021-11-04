@@ -108,7 +108,7 @@ test("status 400: sent wrong type of obj", () => {
     });
 });
 
-describe("GET ALL - Articles", () => {
+describe.only("GET ALL - Articles", () => {
   test("status 200: responds with an array of the topics", () => {
     return request(app)
       .get("/api/articles")
@@ -190,13 +190,10 @@ describe("GET ALL - Articles", () => {
         });
       });
   });
-  test("status 400: Invalid query type, query is not_valid", () => {
+  test("status 200: Invalid query type is ignored", () => {
     return request(app)
       .get("/api/articles?not_a_query=not_an_input")
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Invalid: not a query");
-      });
+      .expect(200);
   });
   test("status 400: sort_by is not a valid sort_by option", () => {
     return request(app)
@@ -234,7 +231,7 @@ describe("GET ALL - Articles", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("status 200: should respond with an array of comments for the article_id", () => {
     return request(app)
       .get("/api/articles/3/comments")
@@ -270,6 +267,24 @@ describe.only("GET /api/articles/:article_id/comments", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("status 201: Comment posted and posted comment returned", () => {
+    const demoComment = {
+      username: "icellusedkars",
+      body: "enjoying the project's progress",
+    };
+
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send(demoComment)
+      .then((response) => {
+        const { body } = response;
+        console.log(body);
+        expect(body.postedComment);
       });
   });
 });

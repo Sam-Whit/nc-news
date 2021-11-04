@@ -85,7 +85,19 @@ exports.fetchArticleCommentArr = (article_id) => {
     WHERE article_id = $1
     GROUP BY comments.comment_id;`;
   return db.query(queryStr, [article_id]).then(({ rows }) => {
-    console.log(rows);
+    if (rows.length !== 0) {
+      return rows;
+    } else {
+      return Promise.reject({ status: 404, msg: "article not found" });
+    }
+  });
+};
+
+exports.postComment = (body, username, id) => {
+  const queryStr = `INSERT INTO comments (body, author, article_id)
+    VALUES ($1, $2, $3)
+    RETURNING *;`;
+  return db.query(queryStr, [body, username, id]).then(({ rows }) => {
     return rows;
   });
 };
