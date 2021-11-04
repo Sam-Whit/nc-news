@@ -204,7 +204,7 @@ describe.only("GET ALL - Articles", () => {
       .expect(400)
       .then((response) => {
         const { body } = response;
-        expect(body.msg).toEqual("Bad request");
+        expect(body.msg).toEqual("Invalid sort query");
       });
   });
   it("Status 400: order which isn't 'asc' or 'desc'", () => {
@@ -213,7 +213,7 @@ describe.only("GET ALL - Articles", () => {
       .expect(400)
       .then((response) => {
         const { body } = response;
-        expect(body.msg).toEqual("Bad request");
+        expect(body.msg).toEqual("Invalid order query");
       });
   });
   test("status 404: Queried topic does not exist in database", () => {
@@ -224,12 +224,12 @@ describe.only("GET ALL - Articles", () => {
         expect(body.msg).toBe("topic not found");
       });
   });
-  //   test("status 404: Queried category does exist but no articles", () => {
-  //     return request(app)
-  //       .get("/api/articles?topic=")
-  //       .expect(404)
-  //       .then(({ body }) => {
-  //         expect(body.msg).toBe("articles not found");
-  //       });
-  //   });
+  test("status 204: Queried topic does exist but no articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body.msg).toBe("articles not found");
+      });
+  });
 });

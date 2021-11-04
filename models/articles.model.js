@@ -53,6 +53,24 @@ exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
 
   queryStr += ` ORDER BY ${sort_by} ${order}`;
 
+  if (
+    ![
+      "title",
+      "topic",
+      "article_id",
+      "body",
+      "author",
+      "votes",
+      "created_at",
+    ].includes(sort_by)
+  ) {
+    return Promise.reject({ status: 400, msg: "Invalid sort query" });
+  }
+
+  if (!["asc", "desc"].includes(order)) {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
   return db.query(queryStr, queryValues).then(({ rows }) => {
     return rows;
   });
