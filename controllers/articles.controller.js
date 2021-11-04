@@ -2,6 +2,7 @@ const {
   fetchArticle,
   patchVotes,
   fetchArticlesArr,
+  fetchArticleCommentArr,
 } = require("../models/articles.model.js");
 
 exports.getArticle = (req, res, next) => {
@@ -27,5 +28,15 @@ exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
   fetchArticlesArr(sort_by, order, topic)
     .then((articles) => res.status(200).send({ articles }))
+    .catch(next);
+};
+
+exports.getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+
+  fetchArticleCommentArr(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
     .catch(next);
 };

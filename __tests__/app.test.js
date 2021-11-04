@@ -30,7 +30,7 @@ describe("GET api/topics", () => {
   });
 });
 
-describe("/api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("status 200: returns an article by id", () => {
     return request(app)
       .get("/api/articles/1")
@@ -108,7 +108,7 @@ test("status 400: sent wrong type of obj", () => {
     });
 });
 
-describe.only("GET ALL - Articles", () => {
+describe("GET ALL - Articles", () => {
   test("status 200: responds with an array of the topics", () => {
     return request(app)
       .get("/api/articles")
@@ -171,7 +171,7 @@ describe.only("GET ALL - Articles", () => {
         });
       });
   });
-  it("status 200: can use all three queries", () => {
+  test("status 200: can use all three queries", () => {
     return request(app)
       .get("/api/articles?topic=cats&order=asc&sort_by=article_id")
       .expect(200)
@@ -198,7 +198,7 @@ describe.only("GET ALL - Articles", () => {
         expect(body.msg).toBe("Invalid: not a query");
       });
   });
-  it("status 400: sort_by is not a valid sort_by option", () => {
+  test("status 400: sort_by is not a valid sort_by option", () => {
     return request(app)
       .get("/api/articles?sort_by=not_sort_by")
       .expect(400)
@@ -207,7 +207,7 @@ describe.only("GET ALL - Articles", () => {
         expect(body.msg).toEqual("Invalid sort query");
       });
   });
-  it("Status 400: order which isn't 'asc' or 'desc'", () => {
+  test("Status 400: order which isn't 'asc' or 'desc'", () => {
     return request(app)
       .get("/api/articles?order=not_order")
       .expect(400)
@@ -230,6 +230,30 @@ describe.only("GET ALL - Articles", () => {
       .expect(204)
       .then(({ body }) => {
         expect(body.msg).toBe("articles not found");
+      });
+  });
+});
+
+describe.only("GET /api/articles/:article_id/comments", () => {
+  test("status 200: should respond with an array of comments for the article_id", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((response) => {
+        const { body } = response;
+        expect(body.comments).toBeInstanceOf(Array);
+        expect(body.comments).toHaveLength(2);
+        body.comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+            })
+          );
+        });
       });
   });
 });

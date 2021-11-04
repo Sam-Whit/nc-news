@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { checkExists } = require("../db/data/utils");
 
 //::int string conversion to interger from string in SQL
 
@@ -47,7 +48,6 @@ exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
     queryValues.push(topic);
     queryStr += ` WHERE articles.topic = $1`;
   }
-  console.log(queryStr);
 
   queryStr += ` GROUP BY articles.article_id`;
 
@@ -71,7 +71,21 @@ exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
   }
 
+  //   if (!"not sure what to put here".length) {
+  //     await checkExists("articles", "topics", topic);
+  //   }
+
   return db.query(queryStr, queryValues).then(({ rows }) => {
+    return rows;
+  });
+};
+
+exports.fetchArticleCommentArr = (article_id) => {
+  const queryStr = `SELECT * FROM comments 
+    WHERE article_id = $1
+    GROUP BY comments.comment_id;`;
+  return db.query(queryStr, [article_id]).then(({ rows }) => {
+    console.log(rows);
     return rows;
   });
 };
