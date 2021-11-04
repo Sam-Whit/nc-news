@@ -295,4 +295,46 @@ describe.only("POST /api/articles/:article_id/comments", () => {
         );
       });
   });
+  test("status 400: comment body doesn't exist", () => {
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send({ username: "icellusedkars" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, no comment provided");
+      });
+  });
+  test("status 400: sent by a nonuser", () => {
+    return request(app)
+      .post("/api/articles/9/comments")
+      .send({ username: "nonUser", body: "enjoying the project's progress" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+  test("status 400: article_id does not exist in database", () => {
+    return request(app)
+      .post("/api/articles/9999/comments")
+      .send({
+        username: "icellusedkars",
+        body: "enjoying the project's progress",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+  test("status 400: invalid article_id", () => {
+    return request(app)
+      .post("/api/articles/not_an_article_id/comments")
+      .send({
+        username: "icellusedkars",
+        body: "enjoying the project's progress",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
 });

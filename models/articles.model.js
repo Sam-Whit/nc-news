@@ -97,9 +97,17 @@ exports.fetchArticleCommentArr = (article_id) => {
 };
 
 exports.postComment = (body, username, id) => {
+  console.log("in the function");
+  if (!body) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request, no comment provided",
+    });
+  }
   const queryStr = `INSERT INTO comments (body, author, article_id)
     VALUES ($1, $2, $3)
     RETURNING *;`;
+
   return db.query(queryStr, [body, username, id]).then(({ rows }) => {
     return rows[0];
   });

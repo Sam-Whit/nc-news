@@ -1,5 +1,5 @@
 const format = require("pg-format");
-const db = require("../connection");
+const db = require("../connection.js");
 
 // exports.checkTopicExists = async (topic) => {
 //   const dbOutput = await db.query("SELECT * FROM articles WHERE topic = $1;", [
