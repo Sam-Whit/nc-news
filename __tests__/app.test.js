@@ -221,12 +221,12 @@ describe.only("GET ALL - Articles", () => {
         expect(body.msg).toBe("topic not found");
       });
   });
-  test("status 204: Queried topic does exist but no articles", () => {
+  test("status 200: Queried topic does exist but no articles", () => {
     return request(app)
       .get("/api/articles?topic=paper")
-      .expect(204)
+      .expect(200)
       .then(({ body }) => {
-        expect(body.msg).toBe("articles not found");
+        expect(body.articles).toEqual([]);
       });
   });
 });

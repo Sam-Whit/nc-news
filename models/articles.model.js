@@ -38,21 +38,11 @@ RETURNING *;`;
   });
 };
 
-exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
-  let queryStr = `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT(comments.comment_id)::Int AS comment_count FROM articles
-    LEFT JOIN comments ON articles.article_id = comments.article_id`;
-
-  const queryValues = [];
-
-  if (topic) {
-    queryValues.push(topic);
-    queryStr += ` WHERE articles.topic = $1`;
-  }
-
-  queryStr += ` GROUP BY articles.article_id`;
-
-  queryStr += ` ORDER BY ${sort_by} ${order}`;
-
+exports.fetchArticlesArr = async (
+  sort_by = "created_at",
+  order = "desc",
+  topic
+) => {
   if (
     ![
       "title",
@@ -71,13 +61,26 @@ exports.fetchArticlesArr = (sort_by = "created_at", order = "desc", topic) => {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
   }
 
-  //   if (!"not sure what to put here".length) {
-  //     await checkExists("articles", "topics", topic);
-  //   }
+  let queryStr = `SELECT articles.article_id, articles.title, articles.author, articles.topic, articles.created_at, articles.votes, COUNT(comments.comment_id)::Int AS comment_count FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
-  return db.query(queryStr, queryValues).then(({ rows }) => {
-    return rows;
-  });
+  const queryValues = [];
+
+  if (topic) {
+    queryValues.push(topic);
+    queryStr += ` WHERE articles.topic = $1`;
+  }
+
+  queryStr += ` GROUP BY articles.article_id`;
+
+  queryStr += ` ORDER BY ${sort_by} ${order}`;
+
+  const { rows } = await db.query(queryStr, queryValues);
+
+  if (!rows.length && topic) {
+    await checkExists("topics", "slug", topic);
+  }
+  return rows;
 };
 
 exports.fetchArticleCommentArr = (article_id) => {
