@@ -108,7 +108,7 @@ test("status 400: sent wrong type of obj", () => {
     });
 });
 
-describe.only("GET ALL - Articles", () => {
+describe("GET ALL - Articles", () => {
   test("status 200: responds with an array of the topics", () => {
     return request(app)
       .get("/api/articles")
@@ -271,7 +271,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
-describe("POST /api/articles/:article_id/comments", () => {
+describe.only("POST /api/articles/:article_id/comments", () => {
   test("status 201: Comment posted and posted comment returned", () => {
     const demoComment = {
       username: "icellusedkars",
