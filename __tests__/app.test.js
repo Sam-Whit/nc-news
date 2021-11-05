@@ -271,7 +271,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("POST /api/articles/:article_id/comments", () => {
+describe("POST /api/articles/:article_id/comments", () => {
   test("status 201: Comment posted and posted comment returned", () => {
     const demoComment = {
       username: "icellusedkars",
@@ -332,6 +332,36 @@ describe.only("POST /api/articles/:article_id/comments", () => {
         username: "icellusedkars",
         body: "enjoying the project's progress",
       })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+});
+
+describe.only("DELETE /api/comments/:comment_id", () => {
+  test("status 204: Comment deleted and message returned saying status 204 and no content", () => {
+    return request(app)
+      .delete("/api/comments/4")
+      .expect(204)
+      .then(() => {
+        return db.query("SELECT * FROM comments");
+      })
+      .then(({ rows }) => {
+        expect(rows.length).toBe(17);
+      });
+  });
+  test("status 400: comment_id not in database", () => {
+    return request(app)
+      .delete("/api/comments/6452")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+  test("status 400: comment_id wrong type", () => {
+    return request(app)
+      .delete("/api/comments/not_a_comment_id")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request, invalid input");
