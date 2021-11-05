@@ -87,6 +87,5 @@ exports.getAllEndPoints = (req, res, next) => {
       description: "Allows you to delete a comment",
     },
   };
-  console.log(endPoints);
   res.status(200).send(endPoints).catch(next);
 };
