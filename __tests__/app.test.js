@@ -472,13 +472,18 @@ describe("GET /api", () => {
   });
 });
 
-describe("GET /api/users", () => {
-  test("Status 200: returns an array of usernames.");
-  return request(app)
-    .get("/api/users")
-    .expect(200)
-    .then(({ body }) => {
-      console.log(body);
-      expect(body.users);
-    });
+describe.only("GET /api/users", () => {
+  test("Status 200: returns an array of usernames.", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).toHaveLength(4);
+        body.users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+          });
+        });
+      });
+  });
 });
