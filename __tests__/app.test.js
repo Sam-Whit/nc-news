@@ -68,44 +68,45 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("PATCH /api/articles/:article_id", () => {});
-test("status 201: accepts an object in the form { inc_votes: newVote } and responds with the updated article", () => {
-  return request(app)
-    .patch("/api/articles/5")
-    .send({ inc_votes: 11 })
-    .expect(201)
-    .then((response) => {
-      const { body } = response;
-      expect(body.article).toEqual(
-        expect.objectContaining({
-          author: expect.any(String),
-          title: expect.any(String),
-          article_id: 5,
-          body: expect.any(String),
-          topic: expect.any(String),
-          created_at: expect.any(String),
-          votes: 11,
-        })
-      );
-    });
-});
-test("status 400: malformed body / missing required fields", () => {
-  return request(app)
-    .patch("/api/articles/5")
-    .send()
-    .expect(400)
-    .then(({ body }) => {
-      expect(body.msg).toBe("Bad request, no input obj provided");
-    });
-});
-test("status 400: sent wrong type of obj", () => {
-  return request(app)
-    .patch("/api/articles/5")
-    .send({ inc_votes: "string" })
-    .expect(400)
-    .then(({ body }) => {
-      expect(body.msg).toBe("Bad request, invalid input");
-    });
+describe("PATCH /api/articles/:article_id", () => {
+  test("status 201: accepts an object in the form { inc_votes: newVote } and responds with the updated article", () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: 11 })
+      .expect(201)
+      .then((response) => {
+        const { body } = response;
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: 5,
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: 11,
+          })
+        );
+      });
+  });
+  test("status 400: malformed body / missing required fields", () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send()
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, no input obj provided");
+      });
+  });
+  test("status 400: sent wrong type of obj", () => {
+    return request(app)
+      .patch("/api/articles/5")
+      .send({ inc_votes: "string" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
 });
 
 describe("GET ALL - Articles", () => {
@@ -472,7 +473,7 @@ describe("GET /api", () => {
   });
 });
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
   test("Status 200: returns an array of usernames.", () => {
     return request(app)
       .get("/api/users")
@@ -483,6 +484,22 @@ describe.only("GET /api/users", () => {
           expect(user).toMatchObject({
             username: expect.any(String),
           });
+        });
+      });
+  });
+});
+
+describe.only("GET /api/users/:username", () => {
+  test("Status 200: Returns a specific user and associated information", () => {
+    return request(app)
+      .get("/api/users/rogersop")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          username: "rogersop",
+          name: "paul",
+          avatar_url:
+            "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
         });
       });
   });

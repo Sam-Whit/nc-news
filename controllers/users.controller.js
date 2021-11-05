@@ -7,3 +7,5 @@ exports.getUserArr = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.getUser = (req, res, next);
