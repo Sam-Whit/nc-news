@@ -97,7 +97,6 @@ exports.fetchArticleCommentArr = (article_id) => {
 };
 
 exports.postComment = (body, username, id) => {
-  console.log("in the function");
   if (!body) {
     return Promise.reject({
       status: 400,

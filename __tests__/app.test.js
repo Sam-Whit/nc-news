@@ -340,7 +340,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 });
 
 describe("DELETE /api/comments/:comment_id", () => {
-  test("status 204: Comment deleted and message returned saying status 204 and no content", () => {
+  test("status 204: Comment deleted and message", () => {
     return request(app)
       .delete("/api/comments/4")
       .expect(204)
@@ -365,6 +365,17 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request, invalid input");
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("Status 200: Returns a summary of all endpoints and their descriptions", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        expect(typeof body).toBe("object");
       });
   });
 });
