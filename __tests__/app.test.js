@@ -339,24 +339,24 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
   test("status 204: Comment deleted and message returned saying status 204 and no content", () => {
     return request(app)
       .delete("/api/comments/4")
       .expect(204)
       .then(() => {
-        return db.query("SELECT * FROM comments");
+        return db.query("SELECT * FROM comments;");
       })
       .then(({ rows }) => {
         expect(rows.length).toBe(17);
       });
   });
-  test("status 400: comment_id not in database", () => {
+  test("status 404: comment_id not in database", () => {
     return request(app)
       .delete("/api/comments/6452")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad request, invalid input");
+        expect(body.msg).toBe("comment not found");
       });
   });
   test("status 400: comment_id wrong type", () => {
