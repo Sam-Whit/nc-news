@@ -84,6 +84,18 @@ exports.getAllEndPoints = (req, res, next) => {
     "DELETE /api/comments/:comment_id": {
       description: "Allows you to delete a comment",
     },
+    "GET /api/users": {
+      description: "Returns an array of all users",
+    },
+    "GET GET /api/users/:username": {
+      description: "Responds with a specific user object",
+      exampleResponse: {
+        username: "icellusedkars",
+        name: "sam",
+        avatar_url:
+          "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+      },
+    },
   };
   res.status(200).send(endPoints).catch(next);
 };
