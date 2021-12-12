@@ -232,7 +232,7 @@ describe("GET ALL - Articles", () => {
   });
 });
 
-describe("GET /api/articles/:article_id/comments", () => {
+describe.only("GET /api/articles/:article_id/comments", () => {
   test("status 200: should respond with an array of comments for the article_id", () => {
     return request(app)
       .get("/api/articles/3/comments")
