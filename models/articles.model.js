@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-const { checkExists } = require("../db/data/utils");
+const { checkExists } = require("../utils");
 
 //::int string conversion to interger from string in SQL
 
