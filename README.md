@@ -85,7 +85,7 @@ https://practice-news.herokuapp.com/
 ### Get All Endpoints
 
 ```http
-  GET /api
+GET /api
 ```
 
 Fetches information listing all endpoints in JSON format.
