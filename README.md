@@ -212,7 +212,7 @@ Responds with:
 ### Get A Specific User
 
 ```http
-
+GET /api/users/:username
 ```
 
 Responds with:
